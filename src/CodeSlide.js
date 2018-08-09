@@ -13,18 +13,21 @@ const calculateScrollCenter = require("./calculateScrollCenter");
 const scrollToElement = require("./scrollToElement");
 const getComputedCodeStyle = require("./getComputedCodeStyle");
 
-function startOrEnd(index, loc) {
-  if (index === loc[0]) {
+function startOrEnd(index, locs) {
+  const start = Math.min(...locs.map(loc => loc[0]));
+  const end = Math.max(...locs.map(loc => loc[1]));
+  if (index === start) {
     return "start";
-  } else if (index === loc[1]) {
+  } else if (index === end) {
     return "end";
   } else {
     return null;
   }
 }
 
-function calculateOpacity(index, loc) {
-  return loc[0] <= index && loc[1] > index ? 1 : 0.2;
+function calculateOpacity(index, locs) {
+  const shouldHighlight = locs.some(loc => loc[0] <= index && loc[1] > index);
+  return shouldHighlight ? 1 : 0.2;
 }
 
 function getLineNumber(index) {
@@ -53,7 +56,8 @@ class CodeSlide extends React.Component {
     code: PropTypes.string.isRequired,
     ranges: PropTypes.arrayOf(
       PropTypes.shape({
-        loc: PropTypes.arrayOf(PropTypes.number).isRequired,
+        loc: PropTypes.arrayOf(PropTypes.number),
+        locs: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.number)),
         title: PropTypes.oneOfType([PropTypes.element, PropTypes.string]),
         note: PropTypes.oneOfType([PropTypes.element, PropTypes.string])
       })
@@ -201,22 +205,23 @@ class CodeSlide extends React.Component {
 
     const range = ranges[active] || {};
     const loc = range.loc || [];
+    const locs = range.locs || [loc];
     const slideBg = bgColor || defaultBgColor;
 
     const newStyle = {
       ...style,
       color: color || style.color
     };
-
-    const lines = getHighlightedCodeLines(code, lang).map((line, index) => {
+    const codeLines = getHighlightedCodeLines(code, lang);
+    const lines = codeLines.map((line, index) => {
       return (
         <div
           key={index}
-          ref={startOrEnd(index, loc)}
+          ref={startOrEnd(index, locs)}
           dangerouslySetInnerHTML={{
             __html: showLineNumbers ? getLineNumber(index) + line : line
           }}
-          style={{ opacity: calculateOpacity(index, loc) }}
+          style={{ opacity: calculateOpacity(index, locs) }}
         />
       );
     });

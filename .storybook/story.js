@@ -1,6 +1,5 @@
 import React from "react";
 import { storiesOf } from "@storybook/react";
-import { action } from "@storybook/addon-actions";
 import CodeSlide from "../src/CodeSlide";
 
 import {
@@ -38,7 +37,23 @@ storiesOf("Button", module).add("with text", () => (
       color="white"
       lang="jsx"
       code={require("raw-loader!./snippets/2.sample-jsx.jsx")}
-      ranges={[{ loc: [1, 4] }]}
+      ranges={[
+        { locs: [[1, 2], [3, 4], [9, 10]] },
+        { locs: [[1, 2], [10, 11]] },
+        { locs: [[2, 3], [11, 12]] }
+      ]}
+    />
+    <CodeSlide
+      showLineNumbers={true}
+      bgColor="secondary"
+      color="white"
+      lang="jsx"
+      code={require("raw-loader!./snippets/2.sample-jsx.jsx")}
+      ranges={[
+        { locs: [[1, 2], [3, 4], [9, 10]] },
+        { locs: [[1, 2], [10, 11]] },
+        { locs: [[2, 3], [11, 12]] }
+      ]}
     />
   </Deck>
 ));
