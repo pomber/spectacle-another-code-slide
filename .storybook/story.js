@@ -39,28 +39,39 @@ storiesOf("Button", module).add("with text", () => (
       code={require("raw-loader!./snippets/2.sample-jsx.jsx")}
       ranges={[
         {
+          loc: [0, 5]
+        },
+        {
           locs: {
             8: [
               {
                 selector: ":nth-child(-n+3)",
                 style: { opacity: 0.35 }
-              },
-              {
-                selector: ":nth-child(n+6)",
-                style: { opacity: 0.35 }
               }
-            ]
-          }
+            ],
+            12: null
+          },
+          note: "React.createElement"
         },
         {
           locs: {
             1: [{ selector: ".tag :not(.tag)", style: { opacity: 0.35 } }],
             3: [{ selector: ".tag :not(.tag)", style: { opacity: 0.35 } }],
             9: [{ selector: ":not(.string)", style: { opacity: 0.35 } }]
-          }
+          },
+          note: "First parameter: tag name"
         },
-        { locs: [[1, 2], [10, 11]] },
-        { locs: [[2, 3], [11, 12]] }
+        {
+          locs: {
+            1: [{ selector: ".tag .tag", style: { opacity: 0.35 } }],
+            10: [{ selector: ":last-child", style: { opacity: 0.35 } }]
+          },
+          note: "Second parameter: props object"
+        },
+        {
+          locs: [[2, 3], [11, 12]],
+          note: "Third parameter+: children"
+        }
       ]}
     />
     <CodeSlide

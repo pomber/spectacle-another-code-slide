@@ -36,7 +36,11 @@ function calculateOpacity(index, locs) {
 }
 
 function getLineNumber(index) {
-  return '<span class="token comment">' + padStart(index + 1, 3) + ".</span> ";
+  return (
+    '<span class="token comment" style="user-select: none">' +
+    padStart(index + 1, 3) +
+    ".</span> "
+  );
 }
 
 function arrayOfArraysToLocDictionary(rawLocs) {
@@ -229,6 +233,7 @@ class CodeSlide extends React.Component {
       color: color || style.color
     };
     const codeLines = getHighlightedCodeLines(code, lang);
+    // debugger;
     const lines = codeLines.map((line, index) => {
       const foo = locs[index];
       const rules = !foo
