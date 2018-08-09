@@ -38,7 +38,6 @@ storiesOf("Button", module).add("with text", () => (
       color="white"
       lang="jsx"
       code={require("raw-loader!./snippets/2.sample-jsx.jsx")}
-      // code="//foo"
       ranges={[{ loc: [1, 4] }]}
     />
   </Deck>
