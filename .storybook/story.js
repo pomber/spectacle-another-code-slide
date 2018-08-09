@@ -1,6 +1,7 @@
 import React from "react";
 import { storiesOf } from "@storybook/react";
 import { action } from "@storybook/addon-actions";
+import CodeSlide from "../src/CodeSlide";
 
 import {
   BlockQuote,
@@ -31,11 +32,14 @@ const theme = createTheme(
 
 storiesOf("Button", module).add("with text", () => (
   <Deck theme={theme}>
-    <Slide bgColor="secondary" textColor="primary">
-      <BlockQuote>
-        <Quote>Example Quote</Quote>
-        <Cite>Author</Cite>
-      </BlockQuote>
-    </Slide>
+    <CodeSlide
+      showLineNumbers={true}
+      bgColor="secondary"
+      color="white"
+      lang="jsx"
+      code={require("raw-loader!./snippets/2.sample-jsx.jsx")}
+      // code="//foo"
+      ranges={[{ loc: [1, 4] }]}
+    />
   </Deck>
 ));
