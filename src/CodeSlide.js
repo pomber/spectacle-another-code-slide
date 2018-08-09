@@ -8,14 +8,16 @@ const CodeSlideImage = require("./CodeSlideImage");
 
 const clamp = require("lodash.clamp");
 const padStart = require("lodash.padstart");
+const flatten = require("lodash.flatten");
+const range = require("lodash.range");
 const getHighlightedCodeLines = require("./getHighlightedCodeLines");
 const calculateScrollCenter = require("./calculateScrollCenter");
 const scrollToElement = require("./scrollToElement");
 const getComputedCodeStyle = require("./getComputedCodeStyle");
 
 function startOrEnd(index, locs) {
-  const start = Math.min(...locs.map(loc => loc[0]));
-  const end = Math.max(...locs.map(loc => loc[1]));
+  const start = Math.min(...Object.keys(locs));
+  const end = Math.max(...Object.keys(locs));
   if (index === start) {
     return "start";
   } else if (index === end) {
@@ -26,12 +28,19 @@ function startOrEnd(index, locs) {
 }
 
 function calculateOpacity(index, locs) {
-  const shouldHighlight = locs.some(loc => loc[0] <= index && loc[1] > index);
-  return shouldHighlight ? 1 : 0.2;
+  const shouldHighlight = Object.keys(locs)
+    .map(Number)
+    .includes(index);
+  return shouldHighlight ? 1 : 0.35;
 }
 
 function getLineNumber(index) {
   return '<span class="token comment">' + padStart(index + 1, 3) + ".</span> ";
+}
+
+function arrayOfArraysToLocDictionary(rawLocs) {
+  const locList = flatten(rawLocs.map(loc => range(loc[0], loc[1])));
+  return Object.assign({}, ...locList.map(n => ({ [n]: {} })));
 }
 
 const computedCodeStyle = getComputedCodeStyle();
@@ -205,7 +214,13 @@ class CodeSlide extends React.Component {
 
     const range = ranges[active] || {};
     const loc = range.loc || [];
-    const locs = range.locs || [loc];
+    const rawLocs = range.locs || [loc];
+    const locs = Array.isArray(rawLocs)
+      ? arrayOfArraysToLocDictionary(rawLocs)
+      : rawLocs;
+
+    console.log(locs);
+
     const slideBg = bgColor || defaultBgColor;
 
     const newStyle = {

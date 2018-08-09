@@ -38,7 +38,12 @@ storiesOf("Button", module).add("with text", () => (
       lang="jsx"
       code={require("raw-loader!./snippets/2.sample-jsx.jsx")}
       ranges={[
-        { locs: [[1, 2], [3, 4], [9, 10]] },
+        {
+          locs: {
+            1: [{ selector: ".tag.tag", style: { opacity: 0.35 } }],
+            9: {}
+          }
+        },
         { locs: [[1, 2], [10, 11]] },
         { locs: [[2, 3], [11, 12]] }
       ]}
