@@ -1,5 +1,6 @@
 const React = require("react");
 const PropTypes = require("prop-types");
+import { css } from "glamor";
 
 const { Slide } = require("spectacle");
 const CodeSlideTitle = require("./CodeSlideTitle");
@@ -40,7 +41,7 @@ function getLineNumber(index) {
 
 function arrayOfArraysToLocDictionary(rawLocs) {
   const locList = flatten(rawLocs.map(loc => range(loc[0], loc[1])));
-  return Object.assign({}, ...locList.map(n => ({ [n]: {} })));
+  return Object.assign({}, ...locList.map(n => ({ [n]: null })));
 }
 
 const computedCodeStyle = getComputedCodeStyle();
@@ -229,6 +230,11 @@ class CodeSlide extends React.Component {
     };
     const codeLines = getHighlightedCodeLines(code, lang);
     const lines = codeLines.map((line, index) => {
+      const foo = locs[index];
+      const rules = !foo
+        ? ""
+        : css(foo.map(fo => ({ [`& ${fo.selector}`]: fo.style })));
+
       return (
         <div
           key={index}
@@ -236,6 +242,7 @@ class CodeSlide extends React.Component {
           dangerouslySetInnerHTML={{
             __html: showLineNumbers ? getLineNumber(index) + line : line
           }}
+          className={rules}
           style={{ opacity: calculateOpacity(index, locs) }}
         />
       );

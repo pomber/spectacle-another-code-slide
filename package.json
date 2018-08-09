@@ -14,11 +14,12 @@
   "dependencies": {
     "component-raf": "^1.2.0",
     "component-tween": "^1.2.0",
+    "glamor": "^2.20.40",
     "lodash.clamp": "^4.0.1",
+    "lodash.flatten": "^4.4.0",
     "lodash.memoize": "^4.0.1",
     "lodash.padstart": "^4.2.0",
-    "lodash.flatten": "^3.2.0",
-    "lodash.range": "^4.2.0",
+    "lodash.range": "^3.2.0",
     "prop-types": "^15.6.0"
   },
   "peerDependencies": {

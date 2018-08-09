@@ -40,8 +40,23 @@ storiesOf("Button", module).add("with text", () => (
       ranges={[
         {
           locs: {
-            1: [{ selector: ".tag.tag", style: { opacity: 0.35 } }],
-            9: {}
+            8: [
+              {
+                selector: ":nth-child(-n+3)",
+                style: { opacity: 0.35 }
+              },
+              {
+                selector: ":nth-child(n+6)",
+                style: { opacity: 0.35 }
+              }
+            ]
+          }
+        },
+        {
+          locs: {
+            1: [{ selector: ".tag :not(.tag)", style: { opacity: 0.35 } }],
+            3: [{ selector: ".tag :not(.tag)", style: { opacity: 0.35 } }],
+            9: [{ selector: ":not(.string)", style: { opacity: 0.35 } }]
           }
         },
         { locs: [[1, 2], [10, 11]] },
