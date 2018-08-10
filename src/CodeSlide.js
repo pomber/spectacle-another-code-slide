@@ -28,11 +28,10 @@ function startOrEnd(index, locs) {
   }
 }
 
-function calculateOpacity(index, locs) {
-  const shouldHighlight = Object.keys(locs)
+function shouldHighlight(index, locs) {
+  return Object.keys(locs)
     .map(Number)
     .includes(index);
-  return shouldHighlight ? 1 : 0.35;
 }
 
 function getLineNumber(index) {
@@ -152,8 +151,8 @@ class CodeSlide extends React.Component {
   }
 
   scrollActiveIntoView = skipAnimation => {
-    const { container, start, end } = this.refs;
-    const scrollTo = calculateScrollCenter(start, end, container);
+    const { container, code, start, end } = this.refs;
+    const scrollTo = calculateScrollCenter(start, end, container, code);
     scrollToElement(container, 0, scrollTo, {
       duration: skipAnimation ? 1 : 1000
     });
@@ -224,7 +223,7 @@ class CodeSlide extends React.Component {
       ? arrayOfArraysToLocDictionary(rawLocs)
       : rawLocs;
 
-    console.log(locs);
+    // console.log(locs);
 
     const slideBg = bgColor || defaultBgColor;
 
@@ -238,17 +237,27 @@ class CodeSlide extends React.Component {
       const foo = locs[index];
       const rules = !foo
         ? ""
-        : css(foo.map(fo => ({ [`& ${fo.selector}`]: fo.style })));
+        : css(
+            foo.map(fo => ({
+              [`& ${fo.selector}`]: fo.style || "opacity: 0.35"
+            }))
+          );
 
       return (
         <div
           key={index}
           ref={startOrEnd(index, locs)}
           dangerouslySetInnerHTML={{
-            __html: showLineNumbers ? getLineNumber(index) + line : line
+            __html: showLineNumbers ? getLineNumber(index) + line : line || " "
           }}
           className={rules}
-          style={{ opacity: calculateOpacity(index, locs) }}
+          style={
+            shouldHighlight(index, locs)
+              ? { opacity: 1 }
+              : {
+                  opacity: 0.35
+                }
+          }
         />
       );
     });
@@ -258,7 +267,10 @@ class CodeSlide extends React.Component {
         {range.title && <CodeSlideTitle>{range.title}</CodeSlideTitle>}
 
         <pre ref="container" style={newStyle}>
-          <code style={{ display: "inline-block", textAlign: "left" }}>
+          <code
+            ref="code"
+            style={{ display: "inline-block", textAlign: "left" }}
+          >
             {lines}
           </code>
         </pre>

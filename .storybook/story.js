@@ -45,8 +45,7 @@ storiesOf("Button", module).add("with text", () => (
           locs: {
             8: [
               {
-                selector: ":nth-child(-n+3)",
-                style: { opacity: 0.35 }
+                selector: ":nth-child(-n+3)"
               }
             ],
             12: null
@@ -55,16 +54,16 @@ storiesOf("Button", module).add("with text", () => (
         },
         {
           locs: {
-            1: [{ selector: ".tag :not(.tag)", style: { opacity: 0.35 } }],
-            3: [{ selector: ".tag :not(.tag)", style: { opacity: 0.35 } }],
-            9: [{ selector: ":not(.string)", style: { opacity: 0.35 } }]
+            1: [{ selector: ".tag :not(.tag)" }],
+            3: [{ selector: ".tag :not(.tag)" }],
+            9: [{ selector: ":not(.string)" }]
           },
           note: "First parameter: tag name"
         },
         {
           locs: {
-            1: [{ selector: ".tag .tag", style: { opacity: 0.35 } }],
-            10: [{ selector: ":last-child", style: { opacity: 0.35 } }]
+            1: [{ selector: ".tag .tag" }],
+            10: [{ selector: ":last-child" }]
           },
           note: "Second parameter: props object"
         },
@@ -75,15 +74,32 @@ storiesOf("Button", module).add("with text", () => (
       ]}
     />
     <CodeSlide
-      showLineNumbers={true}
+      showLineNumbers={false}
       bgColor="secondary"
       color="white"
       lang="jsx"
-      code={require("raw-loader!./snippets/2.sample-jsx.jsx")}
+      code={require("raw-loader!./snippets/math.jsx")}
       ranges={[
-        { locs: [[1, 2], [3, 4], [9, 10]] },
-        { locs: [[1, 2], [10, 11]] },
-        { locs: [[2, 3], [11, 12]] }
+        { locs: [[0, 24]] },
+        { locs: [[0, 5]] },
+        { locs: [[6, 14]] },
+        { locs: [[15, 21]] },
+        { locs: [[22, 23]] }
+      ]}
+    />
+    <CodeSlide
+      showLineNumbers={false}
+      bgColor="secondary"
+      color="white"
+      lang="jsx"
+      code={require("raw-loader!./snippets/fizzbuzz.2.jsx")}
+      ranges={[
+        { locs: [[0, 5]], title: "FizzBuzz" },
+        { locs: [[0, 5]] },
+        { locs: [[6, 14]] },
+        { locs: [[15, 21]] },
+        { locs: [[22, 23]] },
+        { locs: [[27, 30]] }
       ]}
     />
   </Deck>
