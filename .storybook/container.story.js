@@ -11,17 +11,23 @@ class MyComponent extends React.Component {
     this.selectedRef = React.createRef();
   }
 
-  animateScroll(container, center) {
+  animateScroll(container, content, center, scale, duration) {
     const startY = container.scrollTop;
+
+    // TODO browser support?
+    const startScale =
+      content.getBoundingClientRect().height / content.offsetHeight;
+
     const endY = center;
 
-    const tween = Tween({ top: startY })
+    const tween = Tween({ top: startY, scale: startScale })
       .ease("out-circ")
-      .to({ top: endY })
-      .duration(1000);
+      .to({ top: endY, scale })
+      .duration(duration);
 
     tween.update(o => {
       container.scrollTop = o.top | 0;
+      content.style.transform = "scale(" + o.scale + ")";
     });
     tween.on("end", function() {
       animate = function() {};
@@ -34,46 +40,57 @@ class MyComponent extends React.Component {
     animate();
   }
 
-  scroll() {
+  scroll(duration) {
     const container = this.containerRef.current;
     const content = this.contentRef.current;
-    const selected = this.selectedRef.current;
+    const selected = this.selectedRef.current || content;
 
     const contentTop = content.offsetTop;
     const contentHeight = content.offsetHeight;
+    const selectedHeight = selected.offsetHeight;
 
     const top = selected.offsetTop;
     const bottom = top + selected.offsetHeight;
     const middle = Math.floor((top + bottom) / 2);
     const containerHeight = container.offsetHeight;
 
-    // center in the middle of the selected element
-    let center = middle - contentTop;
+    let scale = 1;
+    if (selectedHeight > containerHeight) {
+      scale = containerHeight / selectedHeight;
+      const minScale = 0.5;
+      scale = scale < minScale ? minScale : scale;
+    }
 
-    if (containerHeight > contentHeight) {
+    // center in the middle of the selected element
+    let center = middle;
+    // debugger;
+
+    const scaledContentHeight = contentHeight * scale;
+    if (containerHeight >= scaledContentHeight) {
       // center in the middle of the content
       center = contentHeight / 2;
     } else {
       const minScroll = containerHeight / 2;
-      const maxScroll = contentHeight - containerHeight / 2;
+      const maxScroll = scaledContentHeight - containerHeight / 2;
       center = center < minScroll ? minScroll : center;
       center = center > maxScroll ? maxScroll : center;
     }
+
     console.log(center);
     // container.scrollTop = center;
-    this.animateScroll(container, center);
+    this.animateScroll(container, content, center, scale, duration);
   }
 
   componentDidMount() {
-    this.scroll();
+    this.scroll(1);
   }
 
   componentDidUpdate() {
-    this.scroll();
+    this.scroll(1000);
   }
 
   state = {
-    selectedIndex: 0
+    selectedIndex: null
   };
 
   render() {
@@ -123,4 +140,7 @@ storiesOf("Container", module)
   ))
   .add("bigger content than container", () => (
     <MyComponent containerHeight={300} items={[100, 50, 200, 20, 20]} />
+  ))
+  .add("bigger selected than container", () => (
+    <MyComponent containerHeight={300} items={[100, 500, 200, 20, 20]} />
   ));
