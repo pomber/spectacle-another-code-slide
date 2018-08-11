@@ -1,5 +1,7 @@
 import React from "react";
 import { storiesOf } from "@storybook/react";
+const Tween = require("component-tween");
+const raf = require("component-raf");
 
 class MyComponent extends React.Component {
   constructor(props) {
@@ -9,18 +11,57 @@ class MyComponent extends React.Component {
     this.selectedRef = React.createRef();
   }
 
+  animateScroll(container, center) {
+    const startY = container.scrollTop;
+    const endY = center;
+
+    const tween = Tween({ top: startY })
+      .ease("out-circ")
+      .to({ top: endY })
+      .duration(1000);
+
+    tween.update(o => {
+      container.scrollTop = o.top | 0;
+    });
+    tween.on("end", function() {
+      animate = function() {};
+    });
+
+    function animate() {
+      raf(animate);
+      tween.update();
+    }
+    animate();
+  }
+
   scroll() {
     const container = this.containerRef.current;
     const content = this.contentRef.current;
     const selected = this.selectedRef.current;
 
     const contentTop = content.offsetTop;
+    const contentHeight = content.offsetHeight;
 
     const top = selected.offsetTop;
     const bottom = top + selected.offsetHeight;
     const middle = Math.floor((top + bottom) / 2);
-    console.log(middle);
-    container.scrollTop = middle - contentTop;
+    const containerHeight = container.offsetHeight;
+
+    // center in the middle of the selected element
+    let center = middle - contentTop;
+
+    if (containerHeight > contentHeight) {
+      // center in the middle of the content
+      center = contentHeight / 2;
+    } else {
+      const minScroll = containerHeight / 2;
+      const maxScroll = contentHeight - containerHeight / 2;
+      center = center < minScroll ? minScroll : center;
+      center = center > maxScroll ? maxScroll : center;
+    }
+    console.log(center);
+    // container.scrollTop = center;
+    this.animateScroll(container, center);
   }
 
   componentDidMount() {
@@ -32,7 +73,7 @@ class MyComponent extends React.Component {
   }
 
   state = {
-    selectedIndex: 1
+    selectedIndex: 0
   };
 
   render() {
@@ -41,7 +82,7 @@ class MyComponent extends React.Component {
         style={{
           background: "green",
           height: 0,
-          padding: "250px 0",
+          padding: this.props.containerHeight / 2 + "px 0",
           overflow: "hidden",
           position: "relative"
         }}
@@ -55,7 +96,7 @@ class MyComponent extends React.Component {
           }}
           ref={this.contentRef}
         >
-          {[100, 50, 200].map((h, i) => (
+          {this.props.items.map((h, i) => (
             <div
               ref={this.state.selectedIndex === i && this.selectedRef}
               style={{
@@ -76,6 +117,10 @@ class MyComponent extends React.Component {
   }
 }
 
-storiesOf("Container", module).add("bigger container than content", () => (
-  <MyComponent />
-));
+storiesOf("Container", module)
+  .add("bigger container than content", () => (
+    <MyComponent containerHeight={500} items={[100, 50, 200]} />
+  ))
+  .add("bigger content than container", () => (
+    <MyComponent containerHeight={300} items={[100, 50, 200, 20, 20]} />
+  ));
