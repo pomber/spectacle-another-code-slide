@@ -4,7 +4,7 @@ const Tween = require("component-tween");
 const raf = require("component-raf");
 
 //TODO more real representation of LOCs
-//navigate with arrows
+//TODO react motion?
 
 class MyComponent extends React.Component {
   constructor(props) {
@@ -71,14 +71,31 @@ class MyComponent extends React.Component {
     // debugger;
 
     const scaledContentHeight = contentHeight * scale;
+    const scaledSelectedHeight = selectedHeight * scale;
+    const contentMargin = (contentHeight - scaledContentHeight) / 2;
+
+    if (scale !== 1) {
+      const halfContent = contentHeight / 2;
+      center = (middle - halfContent) * scale + halfContent;
+    }
+
+    console.log("top", top);
+    console.log("bottom", bottom);
+    console.log("containerHeight", containerHeight);
+    console.log("selectedHeight", selectedHeight);
+    console.log("scaledSelectedHeight", scaledSelectedHeight);
+
     if (containerHeight >= scaledContentHeight) {
       // center in the middle of the content
       center = contentHeight / 2;
-    } else {
-      const minScroll = containerHeight / 2;
-      const maxScroll = scaledContentHeight - containerHeight / 2;
+    } else if (containerHeight >= scaledSelectedHeight) {
+      const minScroll = contentMargin + containerHeight / 2;
+      const maxScroll = contentHeight - contentMargin - containerHeight / 2;
       center = center < minScroll ? minScroll : center;
       center = center > maxScroll ? maxScroll : center;
+    } else {
+      console.log("Bigger selected than container");
+      center = top + contentMargin;
     }
 
     console.log(center);
@@ -101,13 +118,11 @@ class MyComponent extends React.Component {
 
   onKeyDown = e => {
     if (e.which === 38) {
-      console.log("up");
       this.setState(ps => ({
         selectedIndex: Math.max(0, ps.selectedIndex - 1)
       }));
       e.preventDefault();
     } else if (e.which === 40) {
-      console.log("down");
       this.setState(ps => ({
         selectedIndex: Math.min(
           this.props.locs.length - 1,
@@ -151,9 +166,9 @@ class MyComponent extends React.Component {
           {items.map(i => (
             <div
               ref={
-                i === first
+                i + 1 === first
                   ? this.firstSelectedRef
-                  : i === last
+                  : i + 1 === last
                     ? this.lastSelectedRef
                     : null
               }
@@ -176,7 +191,7 @@ class MyComponent extends React.Component {
 storiesOf("Items", module).add("bigger container than content", () => (
   <MyComponent
     containerHeight={400}
-    n={20}
+    n={50}
     locs={[
       {},
       {
@@ -190,6 +205,18 @@ storiesOf("Items", module).add("bigger container than content", () => (
       },
       {
         4: []
+      },
+      {
+        18: [],
+        25: []
+      },
+      {
+        20: [],
+        40: []
+      },
+      {
+        1: [],
+        30: []
       }
     ]}
   />
