@@ -11,7 +11,8 @@ class MyComponent extends React.Component {
     super(props);
     this.containerRef = React.createRef();
     this.contentRef = React.createRef();
-    this.selectedRef = React.createRef();
+    this.firstSelectedRef = React.createRef();
+    this.lastSelectedRef = React.createRef();
   }
 
   animateScroll(container, content, center, scale, duration) {
@@ -46,14 +47,15 @@ class MyComponent extends React.Component {
   scroll(duration) {
     const container = this.containerRef.current;
     const content = this.contentRef.current;
-    const selected = this.selectedRef.current || content;
+    const firstSelected = this.firstSelectedRef.current || content;
+    const lastSelected = this.lastSelectedRef.current || firstSelected;
 
     const contentTop = content.offsetTop;
     const contentHeight = content.offsetHeight;
-    const selectedHeight = selected.offsetHeight;
 
-    const top = selected.offsetTop;
-    const bottom = top + selected.offsetHeight;
+    const top = firstSelected.offsetTop;
+    const bottom = lastSelected.offsetTop + lastSelected.offsetHeight;
+    const selectedHeight = bottom - top;
     const middle = Math.floor((top + bottom) / 2);
     const containerHeight = container.offsetHeight;
 
@@ -84,19 +86,49 @@ class MyComponent extends React.Component {
     this.animateScroll(container, content, center, scale, duration);
   }
 
+  componentWillUnmount() {
+    document.removeEventListener("keydown", this.onKeyDown);
+  }
+
   componentDidMount() {
+    document.addEventListener("keydown", this.onKeyDown);
     this.scroll(1);
   }
 
   componentDidUpdate() {
-    this.scroll(1000);
+    this.scroll(600);
   }
 
+  onKeyDown = e => {
+    if (e.which === 38) {
+      console.log("up");
+      this.setState(ps => ({
+        selectedIndex: Math.max(0, ps.selectedIndex - 1)
+      }));
+      e.preventDefault();
+    } else if (e.which === 40) {
+      console.log("down");
+      this.setState(ps => ({
+        selectedIndex: Math.min(
+          this.props.locs.length - 1,
+          ps.selectedIndex + 1
+        )
+      }));
+      e.preventDefault();
+    }
+  };
+
   state = {
-    selectedIndex: null
+    selectedIndex: 0
   };
 
   render() {
+    const items = [...Array(this.props.n).keys()];
+    const clocs = this.props.locs[this.state.selectedIndex];
+    const isSelected = i => i + 1 in clocs;
+    const first = Math.min(...Object.keys(clocs));
+    const last = Math.max(...Object.keys(clocs));
+    console.log(first, last);
     return (
       <div
         style={{
@@ -116,19 +148,23 @@ class MyComponent extends React.Component {
           }}
           ref={this.contentRef}
         >
-          {this.props.items.map((h, i) => (
+          {items.map(i => (
             <div
-              ref={this.state.selectedIndex === i && this.selectedRef}
+              ref={
+                i === first
+                  ? this.firstSelectedRef
+                  : i === last
+                    ? this.lastSelectedRef
+                    : null
+              }
               style={{
-                background:
-                  this.state.selectedIndex === i ? "#ff9800" : "#cddc39",
-                height: h,
+                background: isSelected(i) ? "#ff9800" : "#cddc39",
+                height: 20,
                 width: 200,
                 border: "1px dashed grey"
               }}
-              onClick={() => this.setState({ selectedIndex: i })}
             >
-              {h}
+              {i + 1}
             </div>
           ))}
         </div>
@@ -137,13 +173,30 @@ class MyComponent extends React.Component {
   }
 }
 
-storiesOf("Container", module)
-  .add("bigger container than content", () => (
-    <MyComponent containerHeight={500} items={[100, 50, 200]} />
-  ))
-  .add("bigger content than container", () => (
-    <MyComponent containerHeight={300} items={[100, 50, 200, 20, 20]} />
-  ))
-  .add("bigger selected than container", () => (
-    <MyComponent containerHeight={300} items={[100, 500, 200, 20, 20]} />
-  ));
+storiesOf("Items", module).add("bigger container than content", () => (
+  <MyComponent
+    containerHeight={400}
+    n={20}
+    locs={[
+      {},
+      {
+        1: [],
+        2: []
+      },
+      {},
+      {
+        3: [],
+        5: []
+      },
+      {
+        4: []
+      }
+    ]}
+  />
+));
+// .add("bigger content than container", () => (
+//   <MyComponent containerHeight={300} n={10} />
+// ))
+// .add("bigger selected than container", () => (
+//   <MyComponent containerHeight={300} n={20} />
+// ))
