@@ -159,7 +159,8 @@ class MyComponent extends React.Component {
           style={{
             background: "red",
             border: "1px solid red",
-            display: "inline-block"
+            display: "inline-block",
+            position: "relative"
           }}
           ref={this.contentRef}
         >
@@ -188,42 +189,43 @@ class MyComponent extends React.Component {
   }
 }
 
-storiesOf("Items", module).add("bigger container than content", () => (
-  <MyComponent
-    containerHeight={400}
-    n={50}
-    locs={[
-      {},
-      {
-        1: [],
-        2: []
-      },
-      {},
-      {
-        3: [],
-        5: []
-      },
-      {
-        4: []
-      },
-      {
-        18: [],
-        25: []
-      },
-      {
-        20: [],
-        40: []
-      },
-      {
-        1: [],
-        30: []
-      }
-    ]}
-  />
-));
-// .add("bigger content than container", () => (
-//   <MyComponent containerHeight={300} n={10} />
-// ))
-// .add("bigger selected than container", () => (
-//   <MyComponent containerHeight={300} n={20} />
-// ))
+storiesOf("Items", module)
+  .add("bigger container than content", () => (
+    <MyComponent containerHeight={300} n={10} locs={[{}, { 1: [] }]} />
+  ))
+  .add("bigger content than container", () => (
+    <MyComponent containerHeight={300} n={20} locs={[{}, { 1: [] }]} />
+  ))
+  .add("bigger selected than container", () => (
+    <MyComponent
+      containerHeight={400}
+      n={50}
+      locs={[
+        {
+          1: [],
+          30: []
+        },
+        {},
+        {
+          1: [],
+          2: []
+        },
+        {},
+        {
+          3: [],
+          5: []
+        },
+        {
+          4: []
+        },
+        {
+          18: [],
+          25: []
+        },
+        {
+          20: [],
+          40: []
+        }
+      ]}
+    />
+  ));
