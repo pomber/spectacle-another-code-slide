@@ -1,3 +1,8 @@
+Forked from: https://github.com/jamiebuilds/spectacle-code-slide
+Work in progress
+
+---
+
 https://flat.badgen.net/badge/contribute/ForkBox%20(experimental)/222
 
 # [spectacle](http://stack.formidable.com/spectacle)-code-slide
