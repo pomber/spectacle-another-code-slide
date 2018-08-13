@@ -3,8 +3,18 @@ import { storiesOf } from "@storybook/react";
 const Tween = require("component-tween");
 const raf = require("component-raf");
 
-//TODO more real representation of LOCs
-//TODO react motion?
+import {
+  BlockQuote,
+  Cite,
+  Deck,
+  Heading,
+  ListItem,
+  List,
+  Quote,
+  Slide,
+  Text
+} from "spectacle";
+import createTheme from "spectacle/lib/themes/default";
 
 class MyComponent extends React.Component {
   constructor(props) {
@@ -196,48 +206,68 @@ class MyComponent extends React.Component {
     );
   }
 }
+const theme = createTheme(
+  {
+    primary: "#fafafa",
+    secondary: "#272822"
+  },
+  {
+    primary: "Montserrat",
+    secondary: "Helvetica"
+  }
+);
 
-storiesOf("Items", module)
+storiesOf("Items Slide", module)
   .add("bigger container than content", () => (
-    <MyComponent containerHeight={400} n={10} locs={[{}, { 1: [] }]} />
+    <Deck theme={theme}>
+      <MyComponent containerHeight={400} n={10} locs={[{}, { 1: [] }]} />
+    </Deck>
   ))
   .add("bigger content than container", () => (
-    <MyComponent containerHeight={300} n={20} locs={[{}, { 1: [] }]} />
+    <Deck theme={theme}>
+      <MyComponent containerHeight={300} n={20} locs={[{}, { 1: [] }]} />
+    </Deck>
   ))
   .add("bigger selected than container", () => (
-    <MyComponent
-      containerHeight={400}
-      n={50}
-      locs={[
-        {
-          1: [],
-          30: []
-        },
-        {},
-        {
-          5: [],
-          40: []
-        },
-        {
-          1: [],
-          2: []
-        },
-        {},
-        {
-          3: [],
-          5: []
-        },
-        {
-          4: []
-        },
-        {
-          18: [],
-          25: []
-        },
-        {
-          20: [],
-          40: []
-        }
-      ]}
-    />
+    <Deck theme={theme}>
+      <Slide bgColor="green" onActive={i => console.log("0", i)} />
+      <Slide bgColor="blue" onActive={i => console.log("1", i)} />
+      <Slide bgColor="red" onActive={i => console.log("2", i)}>
+        <MyComponent
+          containerHeight={400}
+          n={50}
+          locs={[
+            {
+              1: [],
+              30: []
+            },
+            {},
+            {
+              5: [],
+              40: []
+            },
+            {
+              1: [],
+              2: []
+            },
+            {},
+            {
+              3: [],
+              5: []
+            },
+            {
+              4: []
+            },
+            {
+              18: [],
+              25: []
+            },
+            {
+              20: [],
+              40: []
+            }
+          ]}
+        />
+      </Slide>
+    </Deck>
   ));
