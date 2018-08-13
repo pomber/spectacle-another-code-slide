@@ -31,12 +31,44 @@ storiesOf("Another Code Slide", module).add(
     <Deck theme={theme}>
       <AnotherCodeSlide
         lang="jsx"
+        code={require("raw-loader!./snippets/1.sample-jsx.jsx")}
+        locs={[{ 1: [] }, { 14: [] }]}
+      />
+      <AnotherCodeSlide
+        lang="jsx"
         code={require("raw-loader!./snippets/2.sample-jsx.jsx")}
         locs={[
-          // {},
           {
-            2: [1, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17],
-            4: [1, 3]
+            1: [],
+            2: [],
+            3: [],
+            4: [],
+            5: [],
+            6: [],
+            7: [],
+            8: [],
+            9: [],
+            10: [],
+            11: [],
+            12: [],
+            13: []
+          },
+          {
+            1: [4],
+            2: [1, 14],
+            4: [1, 3],
+            5: [1],
+            9: [4, 5, 6, 7],
+            10: [],
+            13: [1]
+          },
+          {
+            2: [2],
+            4: [2]
+          },
+          {
+            2: [],
+            4: [1, 2]
           },
           {},
           {

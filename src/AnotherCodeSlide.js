@@ -51,19 +51,24 @@ class CodeSlide extends React.Component {
     const codeLines = getHighlightedCodeLines(code, lang);
     const clocs = locs[this.state.selectedIndex];
     const isSelected = i => i + 1 in clocs;
+    const tokenOpacity = css({
+      ["& .token-leaf"]: {
+        opacity: "0.35",
+        transition: "opacity 300ms"
+      }
+    });
     return (
       <Slide bgColor="#222">
-        <Container type="pre" height={700}>
-          <Content type="code">
+        <Container type="pre" height={620}>
+          <Content type="code" className={tokenOpacity}>
             {codeLines.map((line, index) => {
-              const hideTokens = clocs[index + 1];
-              const rules = !hideTokens
+              const selectTokens = clocs[index + 1];
+              const rules = !selectTokens
                 ? ""
                 : css(
-                    hideTokens.map(n => ({
-                      [`& .token-${n}`]: {
-                        transition: "opacity 300ms",
-                        opacity: "0.35"
+                    selectTokens.map(n => ({
+                      [`& .token-leaf.token-${n}`]: {
+                        opacity: "1"
                       }
                     }))
                   );
@@ -72,10 +77,10 @@ class CodeSlide extends React.Component {
                   key={index}
                   selected={isSelected(index)}
                   className={rules}
-                  style={{
-                    opacity: isSelected(index) ? 1 : 0.3,
-                    transition: "opacity 300ms"
-                  }}
+                  // style={{
+                  //   opacity: isSelected(index) ? 1 : 0.3,
+                  //   transition: "opacity 300ms"
+                  // }}
                   dangerouslySetInnerHTML={{
                     __html: getLineNumber(index) + line || " "
                   }}

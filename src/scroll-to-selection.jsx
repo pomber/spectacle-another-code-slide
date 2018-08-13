@@ -134,6 +134,7 @@ export class Container extends React.Component {
         ref: this.containerRef,
         style: {
           height: 0,
+          margin: 0,
           background: "#222",
           padding: this.props.height / 2 + "px 0",
           overflow: "hidden",
@@ -150,11 +151,11 @@ export class Container extends React.Component {
 
 export class Content extends React.Component {
   render() {
-    const { type, children, ...rest } = this.props;
+    const { type, children, className, ...rest } = this.props;
     return React.createElement(
       type || "div",
       {
-        className: contentClassName,
+        className: contentClassName + " " + className,
         style: { display: "inline-block", textAlign: "left" },
         ...rest
       },

@@ -6,12 +6,15 @@ function addCustomTokens(tokens, counter = { current: 0 }) {
     if (typeof token === "string" && token.includes("\n")) {
       counter.current = 0;
       return token;
+    } else if (typeof token === "string" && !token.trim()) {
+      // whitespace
+      return token;
     } else if (typeof token === "string") {
       counter.current++;
       return new Prism.Token(
         "free-text",
         token,
-        "token-" + counter.current,
+        ["token-" + counter.current, "token-leaf"],
         token
       );
     } else if (Prism.util.type(token.content) === "Array") {
@@ -21,7 +24,7 @@ function addCustomTokens(tokens, counter = { current: 0 }) {
       counter.current++;
       const aliases =
         Prism.util.type(token.alias) === "Array" ? token.alias : [token.alias];
-      aliases.push("token-" + counter.current);
+      aliases.push("token-" + counter.current, "token-leaf");
       token.alias = aliases;
       return token;
     }
