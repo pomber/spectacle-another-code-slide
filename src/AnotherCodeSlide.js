@@ -2,6 +2,16 @@ import React from "react";
 import { Slide } from "spectacle";
 import { Container, Content, Element } from "./scroll-to-selection";
 import getHighlightedCodeLines from "./getHighlightedCodeLines";
+import padStart from "lodash.padstart";
+import { css } from "glamor";
+
+function getLineNumber(index) {
+  return (
+    '<span class="token comment" style="user-select: none">' +
+    padStart(index + 1, 3) +
+    ".</span> "
+  );
+}
 
 class CodeSlide extends React.Component {
   constructor(props) {
@@ -45,19 +55,33 @@ class CodeSlide extends React.Component {
       <Slide bgColor="#222">
         <Container type="pre" height={700}>
           <Content type="code">
-            {codeLines.map((line, index) => (
-              <Element
-                key={index}
-                selected={isSelected(index)}
-                style={{
-                  opacity: isSelected(index) ? 1 : 0.3,
-                  transition: "opacity 300ms"
-                }}
-                dangerouslySetInnerHTML={{
-                  __html: line || " "
-                }}
-              />
-            ))}
+            {codeLines.map((line, index) => {
+              const hideTokens = clocs[index + 1];
+              const rules = !hideTokens
+                ? ""
+                : css(
+                    hideTokens.map(n => ({
+                      [`& .token-${n}`]: {
+                        transition: "opacity 300ms",
+                        opacity: "0.35"
+                      }
+                    }))
+                  );
+              return (
+                <Element
+                  key={index}
+                  selected={isSelected(index)}
+                  className={rules}
+                  style={{
+                    opacity: isSelected(index) ? 1 : 0.3,
+                    transition: "opacity 300ms"
+                  }}
+                  dangerouslySetInnerHTML={{
+                    __html: getLineNumber(index) + line || " "
+                  }}
+                />
+              );
+            })}
           </Content>
         </Container>
       </Slide>

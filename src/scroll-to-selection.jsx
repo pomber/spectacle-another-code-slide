@@ -165,11 +165,11 @@ export class Content extends React.Component {
 
 export class Element extends React.Component {
   render() {
-    const { type, selected, children, ...rest } = this.props;
+    const { type, selected, children, className, ...rest } = this.props;
     return React.createElement(
       type || "div",
       {
-        className: selected ? selectedClassName : undefined,
+        className: selected ? selectedClassName + " " + className : className,
         ...rest
       },
       children
