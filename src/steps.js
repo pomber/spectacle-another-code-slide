@@ -8,7 +8,7 @@ const mapRange = range => {
   return newTokens;
 };
 
-const mapStep = ({ range, ranges = [], tokens, ...rest }) => {
+export const mapStep = ({ range, ranges = [], tokens, ...rest }) => {
   const newTokens = {};
 
   Object.assign(newTokens, mapRange(range));
