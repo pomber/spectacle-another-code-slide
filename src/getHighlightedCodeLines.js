@@ -60,6 +60,10 @@ function highlight(text, grammar, language) {
 function getHighlightedCodeLines(code, lang) {
   const html = highlight(code, Prism.languages[lang]);
   const lines = html.split("\n");
+  if (lines.length && lines[lines.length - 1].trim() == "") {
+    // Remove last line if it's empty
+    lines.pop();
+  }
   return lines;
 }
 
