@@ -32,6 +32,17 @@ storiesOf("Another Code Slide", module).add(
       <AnotherCodeSlide
         lang="jsx"
         code={require("raw-loader!./snippets/1.sample-jsx.jsx")}
+        steps={[
+          { note: "JSX", range: [1, 5] },
+          { ranges: [[1, 5], [9, 16]] },
+          {
+            range: [1, 5],
+            tokens: {
+              10: [2, 3, 4, 5],
+              15: null //null means all
+            }
+          }
+        ]}
         locs={[{ 1: [] }, { 14: [] }]}
       />
       <AnotherCodeSlide

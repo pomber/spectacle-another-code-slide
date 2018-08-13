@@ -63,7 +63,10 @@ class CodeSlide extends React.Component {
           <Content type="code" className={tokenOpacity}>
             {codeLines.map((line, index) => {
               const selectTokens = clocs[index + 1];
-              const rules = !selectTokens
+              let rules = "";
+              if (selectTokens == null) {
+              }
+              rules = !selectTokens
                 ? ""
                 : css(
                     {

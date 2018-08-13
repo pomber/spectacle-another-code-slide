@@ -5,8 +5,9 @@
   "main": "lib/index.js",
   "scripts": {
     "build": "babel src -d lib",
-    "prepublish": "npm run build",
-    "storybook": "start-storybook -p 9001 -c .storybook"
+    "storybook": "start-storybook -p 9001 -c .storybook",
+    "test": "jest",
+    "test:watch": "jest --watch"
   },
   "author": "pomber",
   "license": "MIT",
@@ -33,6 +34,7 @@
     "babel-preset-react": "^6.11.1",
     "babel-preset-stage-1": "^6.11.4",
     "css-loader": "^1.0.0",
+    "jest": "^23.5.0",
     "prismjs": "^1.15.0",
     "raw-loader": "^0.5.1",
     "react": "^16.4.0",
