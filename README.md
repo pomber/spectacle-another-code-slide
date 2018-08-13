@@ -1,3 +1,5 @@
+https://flat.badgen.net/badge/contribute/ForkBox%20(experimental)/222
+
 # [spectacle](http://stack.formidable.com/spectacle)-code-slide
 
 Present code with style using [spectacle](https://github.com/FormidableLabs/spectacle).
@@ -16,10 +18,10 @@ $ npm install --save spectacle-code-slide
 ## Usage
 
 ```js
-import React from 'react';
-import { Spectacle, Deck } from 'spectacle';
-import CodeSlide from 'spectacle-code-slide';
-import shiaLabeoufMagicGif from "./shiaLabeoufMagic.gif"
+import React from "react";
+import { Spectacle, Deck } from "spectacle";
+import CodeSlide from "spectacle-code-slide";
+import shiaLabeoufMagicGif from "./shiaLabeoufMagic.gif";
 import preloader from "spectacle/lib/utils/preloader";
 
 preloader({
@@ -43,9 +45,10 @@ export default class Presentation extends React.Component {
               { loc: [1, 2], note: "Heres a note!" },
               { loc: [2, 3] },
               { loc: [4, 7], image: shiaLabeoufMagicGif },
-              { loc: [8, 10] },
+              { loc: [8, 10] }
               // ...
-            ]}/>
+            ]}
+          />
           // ...
         </Deck>
       </Spectacle>
