@@ -7,7 +7,7 @@ import { css } from "glamor";
 
 function getLineNumber(index) {
   return (
-    '<span class="token comment" style="user-select: none">' +
+    '<span class="token comment token-leaf line-number" style="user-select: none">' +
     padStart(index + 1, 3) +
     ".</span> "
   );
@@ -66,7 +66,12 @@ class CodeSlide extends React.Component {
               const rules = !selectTokens
                 ? ""
                 : css(
-                    selectTokens.map(n => ({
+                    {
+                      [`& .token-leaf.line-number`]: {
+                        opacity: "1"
+                      }
+                    },
+                    ...selectTokens.map(n => ({
                       [`& .token-leaf.token-${n}`]: {
                         opacity: "1"
                       }
@@ -77,10 +82,6 @@ class CodeSlide extends React.Component {
                   key={index}
                   selected={isSelected(index)}
                   className={rules}
-                  // style={{
-                  //   opacity: isSelected(index) ? 1 : 0.3,
-                  //   transition: "opacity 300ms"
-                  // }}
                   dangerouslySetInnerHTML={{
                     __html: getLineNumber(index) + line || " "
                   }}
