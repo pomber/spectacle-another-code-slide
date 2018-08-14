@@ -80,7 +80,7 @@ const scrollTo = (container, content, center, scale, duration) => {
 
   tween.update(o => {
     container.scrollTop = o.top | 0;
-    content.style.transform = "scale(" + o.scale + ")";
+    // content.style.transform = "scale(" + o.scale + ")";
   });
   tween.on("end", function() {
     animate = function() {};
@@ -156,7 +156,7 @@ export class Content extends React.Component {
       type || "div",
       {
         className: contentClassName + " " + className,
-        style: { display: "inline-block", textAlign: "left" },
+        style: { display: "inline-block", textAlign: "left", width: "100%" },
         ...rest
       },
       children

@@ -2,6 +2,7 @@ import React from "react";
 import { Slide } from "spectacle";
 import CodeScroller from "./code-scroller";
 import UpDownListener from "./vertical-arrows-listener";
+import CodeSlideNote from "./CodeSlideNote";
 
 class CodeSlide extends React.Component {
   state = {
@@ -10,6 +11,7 @@ class CodeSlide extends React.Component {
 
   render() {
     const { code, lang, steps } = this.props;
+    const step = steps[this.state.selectedIndex];
 
     return (
       <Slide bgColor="#222">
@@ -31,6 +33,8 @@ class CodeSlide extends React.Component {
             steps={steps}
             stepIndex={this.state.selectedIndex}
           />
+
+          {step.note && <CodeSlideNote>{step.note}</CodeSlideNote>}
         </UpDownListener>
       </Slide>
     );

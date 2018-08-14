@@ -39,7 +39,7 @@ storiesOf("Another Code Slide", module).add(
         code={require("raw-loader!./snippets/2.sample-jsx.jsx")}
         steps={[
           { note: "JSX", range: [1, 5] },
-          { ranges: [[1, 5], [9, 16]] },
+          { note: "Babel", ranges: [[1, 5], [9, 16]] },
           {
             range: [1, 5],
             tokens: {

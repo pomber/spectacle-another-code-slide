@@ -51,7 +51,14 @@ function getLineClassName({ tokens }, lineNumber) {
 
 class CodeScroller extends React.Component {
   render() {
-    const { code, lang, steps, stepIndex, height = 620 } = this.props;
+    const {
+      code,
+      lang,
+      steps,
+      stepIndex,
+      height = 620,
+      withLineNumbers
+    } = this.props;
     const codeLines = getHighlightedCodeLines(code, lang);
 
     const step = mapStep(steps[stepIndex]);
@@ -74,7 +81,9 @@ class CodeScroller extends React.Component {
                 selected={isSelected(index)}
                 className={rules}
                 dangerouslySetInnerHTML={{
-                  __html: getLineNumber(index) + line || " "
+                  __html: withLineNumbers
+                    ? getLineNumber(index) + line
+                    : line || " "
                 }}
               />
             );
